@@ -249,7 +249,7 @@ class att_page_with_filter_controls {
 
     private function calc_sessgroupslist_sesstype() {
         global $SESSION;
-        
+
         if (!array_key_exists('attsessiontype', $SESSION)) {
             $SESSION->attsessiontype = array($this->cm->course => self::SESSTYPE_ALL);
         }
@@ -295,10 +295,10 @@ class att_page_with_filter_controls {
             $this->sesstype = key($this->sessgroupslist);
         }
     }
-    
+
     private function calc_sessgroupslist() {
         global $USER, $PAGE;
-        
+
         $this->sessgroupslist = array();
         $groupmode = groups_get_activity_groupmode($this->cm);
         if ($groupmode == NOGROUPS)
@@ -396,7 +396,7 @@ class att_take_page_params {
     public $group;
 	public $sort;
     public $copyfrom;
-    
+
     /** @var int view mode of taking attendance page*/
     public $viewmode;
 
@@ -450,11 +450,11 @@ class att_report_page_params extends att_page_with_filter_controls {
 
     public function init($cm) {
         parent::init($cm);
-        
+
         if (!isset($this->group)) $this->group = $this->get_current_sesstype() > 0 ? $this->get_current_sesstype() : 0;
         if (!isset($this->sort)) $this->sort = ATT_SORT_LASTNAME;
     }
-    
+
     public function get_significant_params() {
         $params = array();
 
@@ -581,7 +581,7 @@ class attforblock {
         global $DB;
 
 		$today = time(); // because we compare with database, we don't need to use usertime()
-        
+
         $sql = "SELECT *
                   FROM {attendance_sessions}
                  WHERE :time BETWEEN sessdate AND (sessdate + duration)
@@ -789,7 +789,7 @@ class attforblock {
         $info = construct_session_full_date_time($sess->sessdate, $sess->duration);
         $this->log('session updated', $url, $info);
     }
-    
+
     public function take_from_form_data($formdata) {
         global $DB, $USER;
 
@@ -861,7 +861,7 @@ class attforblock {
         //add a flag to each user indicating whether their enrolment is active
         if (!empty($users)) {
             list($usql, $uparams) = $DB->get_in_or_equal(array_keys($users), SQL_PARAMS_NAMED, 'usid0');
-            
+
             //CONTRIB-3549
             $sql = "SELECT ue.userid, ue.status, ue.timestart, ue.timeend
                       FROM {user_enrolments} ue
@@ -909,7 +909,7 @@ class attforblock {
         if (!isset($this->statuses)) {
             $this->statuses = att_get_statuses($this->id, $onlyvisible);
         }
-        
+
         return $this->statuses;
     }
 
@@ -944,7 +944,7 @@ class attforblock {
                             'pluginfile.php', $this->context->id, 'mod_attforblock', 'session', $sess->id);
             }
         }
-        
+
         return $sessions;
     }
 
@@ -988,7 +988,7 @@ class attforblock {
 
             $this->userstatusesstat[$userid] = $DB->get_records_sql($qry, $params);
         }
-        
+
         return $this->userstatusesstat[$userid];
     }
 
@@ -1054,7 +1054,7 @@ class attforblock {
         // all taked sessions (including previous groups)
 
         if ($this->pageparams->startdate && $this->pageparams->enddate) {
-            $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate AND 
+            $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate AND
                       ats.sessdate >= :sdate AND ats.sessdate < :edate";
         } else {
             $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate";
@@ -1303,7 +1303,7 @@ function att_calc_user_grade_fraction($grade, $maxgrade) {
 
 function att_get_gradebook_maxgrade($attid) {
     global $DB;
-    
+
     return $DB->get_field('attforblock', 'grade', array('id' => $attid));
 }
 

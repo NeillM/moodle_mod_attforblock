@@ -30,7 +30,7 @@ $pageparams = new att_view_page_params();
 
 $id                     = required_param('id', PARAM_INT);
 $pageparams->studentid	= optional_param('studentid', NULL, PARAM_INT);
-$pageparams->mode 		= optional_param('mode', att_view_page_params::MODE_THIS_COURSE, PARAM_INT);
+$pageparams->mode       = optional_param('mode', att_view_page_params::MODE_THIS_COURSE, PARAM_INT);
 $pageparams->view       = optional_param('view', NULL, PARAM_INT);
 $pageparams->curdate	= optional_param('curdate', NULL, PARAM_INT);
 

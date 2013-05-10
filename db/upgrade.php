@@ -340,5 +340,18 @@ function xmldb_attforblock_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2011061800, 'attforblock');
     }
+    
+    if ($oldversion < 2013050700) {
+        $table = new xmldb_table('attendance_sessions');
+        
+        $field = new xmldb_field('studentscanmark');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'descriptionformat');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        upgrade_mod_savepoint(true, 2013050700, 'attforblock');
+    }
+    
     return $result;
 }

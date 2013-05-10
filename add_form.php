@@ -78,7 +78,11 @@ class mod_attforblock_add_form extends moodleform {
         }
         
         $mform->addElement('checkbox', 'addmultiply', '', get_string('createmultiplesessions','attforblock'));
-		$mform->addHelpButton('addmultiply', 'createmultiplesessions', 'attforblock');
+        $mform->addHelpButton('addmultiply', 'createmultiplesessions', 'attforblock');
+        
+        // Studetns can mark own attendance.
+        $mform->addElement('checkbox', 'studentscanmark', '', get_string('studentscanmark','attforblock'));
+        $mform->addHelpButton('studentscanmark', 'studentscanmark', 'attforblock');
 		
 //        $mform->addElement('date_selector', 'sessiondate', get_string('sessiondate','attforblock'));
         $mform->addElement('date_time_selector', 'sessiondate', get_string('sessiondate','attforblock'));

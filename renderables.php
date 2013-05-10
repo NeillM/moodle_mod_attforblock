@@ -105,18 +105,22 @@ class attforblock_filter_controls implements renderable {
     public $prevcur;
     public $nextcur;
     public $curdatetxt;
+    public $reportcontrol;
 
     private $urlpath;
     private $urlparams;
 
     private $att;
 
-    public function __construct(attforblock $att) {
+    public function __construct(attforblock $att, $report = false) {
         global $PAGE;
 
         $this->pageparams = $att->pageparams;
 
         $this->cm = $att->cm;
+        
+        // This is a report control only if $reports is true and the attendance block can be graded.
+        $this->reportcontrol = $report && ($att->grade > 0);
 
         $this->curdate = $att->pageparams->curdate;
 
@@ -447,6 +451,12 @@ class attforblock_report_data implements renderable {
         global $CFG;
 
         $this->perm = $att->perm;
+        
+        $currenttime = time();
+        if ($att->pageparams->view == ATT_VIEW_NOTPRESENT) {
+            $att->pageparams->enddate = $currenttime;
+        }
+        
         $this->pageparams = $att->pageparams;
 
         $this->users = $att->get_users($att->pageparams->group);
@@ -463,17 +473,29 @@ class attforblock_report_data implements renderable {
         if (!$this->decimalpoints = grade_get_setting($att->course->id, 'decimalpoints')) {
             $this->decimalpoints = $CFG->grade_decimalpoints;
         }
+        
+        $maxgrade = att_get_user_max_grade(count($this->sessions), $this->statuses);
 
-        foreach ($this->users as $user) {
-            $this->usersgroups[$user->id] = groups_get_all_groups($att->course->id, $user->id);
-
-            $this->sessionslog[$user->id] = $att->get_user_filtered_sessions_log($user->id);
-
-            $this->usersstats[$user->id] = $att->get_user_statuses_stat($user->id);
-
+        foreach ($this->users as $key => $user) {
+            $grade = 0;
             if ($this->gradable) {
-                $this->grades[$user->id] = $att->get_user_grade($user->id);
-                $this->maxgrades[$user->id] = $att->get_user_max_grade($user->id);
+                $grade = $att->get_user_grade($user->id, array('enddate' => $currenttime));
+                $totalgrade = $att->get_user_grade($user->id);
+            }
+
+            if ($att->pageparams->view != ATT_VIEW_NOTPRESENT || $grade < $maxgrade) {
+                $this->usersgroups[$user->id] = groups_get_all_groups($att->course->id, $user->id);
+
+                $this->sessionslog[$user->id] = $att->get_user_filtered_sessions_log($user->id);
+
+                $this->usersstats[$user->id] = $att->get_user_statuses_stat($user->id);
+
+                if ($this->gradable) {
+                    $this->grades[$user->id] = $totalgrade;
+                    $this->maxgrades[$user->id] = $att->get_user_max_grade($user->id);;
+                }
+            } else {
+                unset($this->users[$key]);
             }
         }
 

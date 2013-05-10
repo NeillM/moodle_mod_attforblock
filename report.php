@@ -33,7 +33,7 @@ $from                   = optional_param('from', NULL, PARAM_ACTION);
 $pageparams->view       = optional_param('view', NULL, PARAM_INT);
 $pageparams->curdate    = optional_param('curdate', NULL, PARAM_INT);
 $pageparams->group    	= optional_param('group', null, PARAM_INT);
-$pageparams->sort 		= optional_param('sort', null, PARAM_INT);
+$pageparams->sort       = optional_param('sort', null, PARAM_INT);
 
 $cm             = get_coursemodule_from_id('attforblock', $id, 0, false, MUST_EXIST);
 $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -56,7 +56,7 @@ $PAGE->navbar->add(get_string('report','attforblock'));
 
 $output = $PAGE->get_renderer('mod_attforblock');
 $tabs = new attforblock_tabs($att, attforblock_tabs::TAB_REPORT);
-$filtercontrols = new attforblock_filter_controls($att);
+$filtercontrols = new attforblock_filter_controls($att, true);
 $reportdata = new attforblock_report_data($att);
 
 global $USER;

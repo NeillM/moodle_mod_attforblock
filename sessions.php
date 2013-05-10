@@ -55,7 +55,7 @@ $formparams = array('course' => $course, 'cm' => $cm, 'modcontext' => $PAGE->con
 switch ($att->pageparams->action) {
     case att_sessions_page_params::ACTION_ADD:
         $url = $att->url_sessions(array('action' => att_sessions_page_params::ACTION_ADD));
-		$mform = new mod_attforblock_add_form($url, $formparams);
+	$mform = new mod_attforblock_add_form($url, $formparams);
         
         if ($formdata = $mform->get_data()) {
             $sessions = construct_sessions_data_for_add($formdata);
@@ -181,6 +181,10 @@ function construct_sessions_data_for_add($formdata) {
 
     $duration = $formdata->durtime['hours']*HOURSECS + $formdata->durtime['minutes']*MINSECS;
     $now = time();
+    
+    if (isset($formdata->studentscanmark)) { // Students will be able to mark their own attendance.
+        $sess->studentscanmark = 1;
+    }
 
     $sessions = array();
     if (isset($formdata->addmultiply)) {

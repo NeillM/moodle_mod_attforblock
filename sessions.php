@@ -56,7 +56,7 @@ switch ($att->pageparams->action) {
     case att_sessions_page_params::ACTION_ADD:
         $url = $att->url_sessions(array('action' => att_sessions_page_params::ACTION_ADD));
 	$mform = new mod_attforblock_add_form($url, $formparams);
-        
+
         if ($formdata = $mform->get_data()) {
             $sessions = construct_sessions_data_for_add($formdata);
             $att->add_sessions($sessions);
@@ -69,7 +69,7 @@ switch ($att->pageparams->action) {
         $url = $att->url_sessions(array('action' => att_sessions_page_params::ACTION_UPDATE, 'sessionid' => $sessionid));
         $formparams['sessionid'] = $sessionid;
 		$mform = new mod_attforblock_update_form($url, $formparams);
-        
+
 	    if ($mform->is_cancelled()) {
 	    	redirect($att->url_manage());
 	    }
@@ -159,7 +159,7 @@ switch ($att->pageparams->action) {
             $att->update_sessions_duration($sessionsids, $duration);
             redirect($att->url_manage(), get_string('sessionupdated','attforblock'));
         }
-        
+
         if ($slist === '')
             print_error ('nosessionsselected','attforblock', $att->url_manage());
 
@@ -181,7 +181,7 @@ function construct_sessions_data_for_add($formdata) {
 
     $duration = $formdata->durtime['hours']*HOURSECS + $formdata->durtime['minutes']*MINSECS;
     $now = time();
-    
+
     if (isset($formdata->studentscanmark)) { // Students will be able to mark their own attendance.
         $sess->studentscanmark = 1;
     }

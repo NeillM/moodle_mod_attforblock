@@ -249,7 +249,7 @@ class att_page_with_filter_controls {
 
     private function calc_sessgroupslist_sesstype() {
         global $USER, $SESSION;
-        
+
         if (!array_key_exists('attsessiontype', $SESSION)) {
             $SESSION->attsessiontype = array($this->cm->course => self::SESSTYPE_ALL);
         }
@@ -295,10 +295,10 @@ class att_page_with_filter_controls {
             $this->sesstype = key($this->sessgroupslist);
         }
     }
-    
+
     private function calc_sessgroupslist() {
         global $PAGE, $USER;
-        
+
         $this->sessgroupslist = array();
         $groupmode = groups_get_activity_groupmode($this->cm);
         if ($groupmode == NOGROUPS)
@@ -396,7 +396,7 @@ class att_take_page_params {
     public $group;
 	public $sort;
     public $copyfrom;
-    
+
     /** @var int view mode of taking attendance page*/
     public $viewmode;
 
@@ -450,11 +450,11 @@ class att_report_page_params extends att_page_with_filter_controls {
 
     public function init($cm) {
         parent::init($cm);
-        
+
         if (!isset($this->group)) $this->group = $this->get_current_sesstype() > 0 ? $this->get_current_sesstype() : 0;
         if (!isset($this->sort)) $this->sort = ATT_SORT_LASTNAME;
     }
-    
+
     public function get_significant_params() {
         $params = array();
 
@@ -581,7 +581,7 @@ class attforblock {
         global $DB;
 
 		$today = time(); // because we compare with database, we don't need to use usertime()
-        
+
         $sql = "SELECT *
                   FROM {attendance_sessions}
                  WHERE :time BETWEEN sessdate AND (sessdate + duration)
@@ -791,10 +791,10 @@ class attforblock {
         $info = construct_session_full_date_time($sess->sessdate, $sess->duration);
         $this->log('session updated', $url, $info);
     }
-    
+
     /**
      * Used to record attendance submitted by the student.
-     * 
+     *
      * @global type $DB
      * @global type $USER
      * @param type $mformdata
@@ -802,10 +802,10 @@ class attforblock {
      */
     public function take_from_student($mformdata) {
         global $DB, $USER;
-        
+
         $statuses = implode(',', array_keys( (array)$this->get_statuses() ));
         $now = time();
-        
+
         $record = new stdClass();
         $record->studentid = $USER->id;
         $record->statusid = $mformdata->status;
@@ -814,23 +814,22 @@ class attforblock {
         $record->sessionid = $mformdata->sessid;
         $record->timetaken = $now;
         $record->takenby = $USER->id;
-        
+
         $dbsesslog = $this->get_session_log($mformdata->sessid);
         if (array_key_exists($record->studentid, $dbsesslog)) {
             // Already recorded do not save.
             return false;
-        }
-        else {
+        } else {
             $DB->insert_record('attendance_log', $record, false);
         }
-        
+
         // Update the session to show that a register has been taken, or staff may overwrite records.
         $rec = new object();
         $rec->id = $mformdata->sessid;
         $rec->lasttaken = $now;
         $rec->lasttakenby = $USER->id;
         $DB->update_record('attendance_sessions', $rec);
-        
+
         // Update the users grade.
         $this->update_users_grade(array($USER->id));
 
@@ -839,10 +838,10 @@ class attforblock {
                 'sessionid' => $mformdata->sessid);
         $url = $this->url_take($params);
         $this->log('attendance taked', $url, $USER->firstname.' '.$USER->lastname);
-        
+
         return true;
     }
-    
+
     public function take_from_form_data($formdata) {
         global $DB, $USER;
 
@@ -914,7 +913,7 @@ class attforblock {
         //add a flag to each user indicating whether their enrolment is active
         if (!empty($users)) {
             list($usql, $uparams) = $DB->get_in_or_equal(array_keys($users), SQL_PARAMS_NAMED, 'usid0');
-            
+
             //CONTRIB-3549
             $sql = "SELECT ue.userid, ue.status, ue.timestart, ue.timeend
                       FROM {user_enrolments} ue
@@ -964,7 +963,7 @@ class attforblock {
         if (!isset($this->statuses)) {
             $this->statuses = att_get_statuses($this->id, $onlyvisible);
         }
-        
+
         return $this->statuses;
     }
 
@@ -999,7 +998,7 @@ class attforblock {
                             'pluginfile.php', $this->context->id, 'mod_attforblock', 'session', $sess->id);
             }
         }
-        
+
         return $sessions;
     }
 
@@ -1029,7 +1028,7 @@ class attforblock {
     }
 
     /**
-     * 
+     *
      * @global type $DB
      * @param type $userid
      * @param type $filters - An array things to filter by. For now only enddate is valid.
@@ -1037,7 +1036,7 @@ class attforblock {
      */
     public function get_user_statuses_stat($userid, array $filters = null) {
         global $DB;
-        
+
         // Need to start setting the parameters here for the filters to work.
         $params = array(
                 'aid'           => $this->id,
@@ -1050,14 +1049,14 @@ class attforblock {
             $processed_filters[] = 'ats.sessdate <= :enddate';
             $params['enddate'] = $filters['enddate'];
         }
-        
+
         // Make the filter array into a SQL string.
         if (!empty($processed_filters)) {
             $processed_filters = 'AND '.implode(' AND ', $processed_filters);
         } else {
             $processed_filters = '';
         }
-        
+
         $qry = "SELECT al.statusid, count(al.statusid) AS stcnt
                     FROM {attendance_log} al
                     JOIN {attendance_sessions} ats
@@ -1067,20 +1066,20 @@ class attforblock {
                          al.studentid = :uid
                          $processed_filters
                 GROUP BY al.statusid";
-        
+
         if ($filters !== null) { // We do not want to cache, or use a cached version of the results when a filter is set.
             return $DB->get_records_sql($qry, $params);
         } else if (!array_key_exists($userid, $this->userstatusesstat)) {
             // Not filtered so if we do not already have them do the query.
             $this->userstatusesstat[$userid] = $DB->get_records_sql($qry, $params);
         }
-        
+
         // Return the cached stats.
         return $this->userstatusesstat[$userid];
     }
 
     /**
-     * 
+     *
      * @param type $userid
      * @param type $filters - An array things to filter by. For now only enddate is valid.
      * @return type
@@ -1148,7 +1147,7 @@ class attforblock {
         list($gsql, $gparams) = $DB->get_in_or_equal($groups, SQL_PARAMS_NAMED, 'gid0');
 
         if ($this->pageparams->startdate && $this->pageparams->enddate) {
-            $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate AND 
+            $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate AND
                       ats.sessdate >= :sdate AND ats.sessdate < :edate AND ats.groupid $gsql";
         } else {
             $where = "ats.attendanceid = :aid AND ats.sessdate >= :csdate AND ats.groupid $gsql";
@@ -1372,7 +1371,7 @@ function att_calc_user_grade_fraction($grade, $maxgrade) {
 
 function att_get_gradebook_maxgrade($attid) {
     global $DB;
-    
+
     return $DB->get_field('attforblock', 'grade', array('id' => $attid));
 }
 

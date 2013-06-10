@@ -118,7 +118,7 @@ class attforblock_filter_controls implements renderable {
         $this->pageparams = $att->pageparams;
 
         $this->cm = $att->cm;
-        
+
         // This is a report control only if $reports is true and the attendance block can be graded.
         $this->reportcontrol = $report && ($att->grade > 0);
 
@@ -297,7 +297,7 @@ class attforblock_take_data implements renderable {
 
         $this->att = $att;
     }
-    
+
     public function url($params=array(), $excludeparams=array()) {
         $params = array_merge($this->urlparams, $params);
 
@@ -409,7 +409,7 @@ class attforblock_user_data implements renderable {
                 }
             }
         }
-        
+
         $this->urlpath = $att->url_view()->out_omit_querystring();
         $params = $att->pageparams->get_significant_params();
         $params['id'] = $att->cm->id;
@@ -455,12 +455,12 @@ class attforblock_report_data implements renderable {
         global $CFG;
 
         $this->perm = $att->perm;
-        
+
         $currenttime = time();
         if ($att->pageparams->view == ATT_VIEW_NOTPRESENT) {
             $att->pageparams->enddate = $currenttime;
         }
-        
+
         $this->pageparams = $att->pageparams;
 
         $this->users = $att->get_users($att->pageparams->group);
@@ -471,13 +471,13 @@ class attforblock_report_data implements renderable {
 
         $this->statuses = $att->get_statuses();
         $this->allstatuses = $att->get_statuses(false);
-        
+
         $this->gradable = $att->grade > 0;
 
         if (!$this->decimalpoints = grade_get_setting($att->course->id, 'decimalpoints')) {
             $this->decimalpoints = $CFG->grade_decimalpoints;
         }
-        
+
         $maxgrade = att_get_user_max_grade(count($this->sessions), $this->statuses);
 
         foreach ($this->users as $key => $user) {

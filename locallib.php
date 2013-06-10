@@ -249,7 +249,7 @@ class att_page_with_filter_controls {
     }
 
     private function calc_sessgroupslist_sesstype() {
-        global $SESSION;
+        global $USER, $SESSION;
 
         if (!array_key_exists('attsessiontype', $SESSION)) {
             $SESSION->attsessiontype = array($this->cm->course => self::SESSTYPE_ALL);
@@ -820,8 +820,7 @@ class attforblock {
         if (array_key_exists($record->studentid, $dbsesslog)) {
             // Already recorded do not save.
             return false;
-        }
-        else {
+        } else {
             $DB->insert_record('attendance_log', $record, false);
         }
 

@@ -17,9 +17,9 @@
 require_once($CFG->libdir.'/formslib.php');
 
 class mod_attforblock_student_attendance_form extends moodleform {
-    function definition() {
+    public function definition() {
         global $CFG, $USER;
-        
+
         $mform  =& $this->_form;
 
         $course = $this->_customdata['course'];
@@ -27,28 +27,28 @@ class mod_attforblock_student_attendance_form extends moodleform {
         $modcontext = $this->_customdata['modcontext'];
         $attforsession = $this->_customdata['session'];
         $attblock = $this->_customdata['attendance'];
-        
+
         $statuses = $attblock->get_statuses();
-        
+
         $mform->addElement('hidden', 'sessid', null);
         $mform->setType('sessid', PARAM_INT);
         $mform->setConstant('sessid', $attforsession->id);
-        
+
         $mform->addElement('hidden', 'sesskey', null);
         $mform->setType('sesskey', PARAM_INT);
         $mform->setConstant('sesskey', sesskey());
-        
+
         // Set a title as the date and time of the session.
         $sesstiontitle = userdate($attforsession->sessdate, get_string('strftimedate')).' '
                 .userdate($attforsession->sessdate, get_string('strftimehm', 'mod_attforblock'));
-        
+
         $mform->addElement('header', 'session', $sesstiontitle);
-        
+
         // If a session description is set display it.
         if (!empty($attforsession->description)) {
             $mform->addElement('html', $attforsession->description);
         }
-        
+
         // Create radio buttons for setting the attendance status.
         $radioarray = array();
         foreach ($statuses as $status) {
@@ -56,7 +56,7 @@ class mod_attforblock_student_attendance_form extends moodleform {
         }
         // Add the radio buttons as a control with the user's name in front.
         $mform->addGroup($radioarray, 'statusarray', $USER->firstname.' '.$USER->lastname.':', array(''), false);
-        
+
         $this->add_action_buttons();
     }
 }

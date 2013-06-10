@@ -26,8 +26,6 @@ require_once(dirname(__FILE__).'/../../config.php');
 require_once(dirname(__FILE__).'/locallib.php');
 require_once(dirname(__FILE__).'/student_attenance_form.php');
 
-define('ARTFORBLOCK_SAVE', 1);
-
 $pageparams = new att_sessions_page_params();
 
 // Check that the required parameters are present.
@@ -60,7 +58,7 @@ if ($mform->is_cancelled()) {
 } else if ($fromform = $mform->get_data()) {
     if (!empty($fromform->status)) {
         $success = $att->take_from_student($fromform);
-        
+
         $url = new moodle_url('/mod/attforblock/view.php', array('id' => $cm->id));
         if ($success) {
             // Redirect back to the view page for the block.
@@ -69,7 +67,7 @@ if ($mform->is_cancelled()) {
             print_error ('attendance_already_submitted', 'mod_attforblock', $url);
         }
     }
-    
+
     // The form did not validate correctly so we will set it to display the data they submitted.
     $mform->setdata($fromform);
 }

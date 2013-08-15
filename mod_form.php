@@ -34,7 +34,7 @@ class mod_attforblock_mod_form extends moodleform_mod {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->setDefault('name', get_string('modulename', 'attforblock'));
-        
+
         $mform->addElement('modgrade', 'grade', get_string('grade'));
         $mform->setDefault('grade', 100);
 

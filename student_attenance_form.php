@@ -56,6 +56,7 @@ class mod_attforblock_student_attendance_form extends moodleform {
         }
         // Add the radio buttons as a control with the user's name in front.
         $mform->addGroup($radioarray, 'statusarray', $USER->firstname.' '.$USER->lastname.':', array(''), false);
+        $mform->addRule('statusarray', get_string('attendancenotset', 'attforblock'), 'required', '', 'client', false, false);
 
         $this->add_action_buttons();
     }

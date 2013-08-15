@@ -64,7 +64,8 @@ $PAGE->navbar->add(get_string('attendancereport', 'attforblock'));
 
 $output = $PAGE->get_renderer('mod_attforblock');
 
-$userid = isset($pageparams->studentid) ? $pageparams->studentid : $USER->id;
+// Stop non-admins from viewing other user's profiles.
+$userid = (isset($pageparams->studentid) &&($att->perm->can_manage() || $att->perm->can_take() || $att->perm->can_change())) ? $pageparams->studentid : $USER->id;
 $userdata = new attforblock_user_data($att, $userid);
 
 echo $output->header();

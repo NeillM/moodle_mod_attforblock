@@ -820,7 +820,8 @@ class attforblock {
         if (array_key_exists($record->studentid, $dbsesslog)) {
             // Already recorded do not save.
             return false;
-        } else {
+        }
+        else {
             $DB->insert_record('attendance_log', $record, false);
         }
 

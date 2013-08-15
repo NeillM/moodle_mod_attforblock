@@ -102,13 +102,13 @@ class user_sessions_cells_generator {
     }
 
     protected function finalize_cells() {
-        
+
     }
 }
 
 class user_sessions_cells_html_generator extends user_sessions_cells_generator {
     private $cell;
-    
+
     protected function construct_existing_status_cell($text) {
         $this->close_open_cell_if_needed();
         $this->cells[] = $text;
@@ -140,7 +140,7 @@ class user_sessions_cells_html_generator extends user_sessions_cells_generator {
             $this->cell = null;
         }
     }
-    
+
     protected function construct_not_taken_cell($text) {
         $this->close_open_cell_if_needed();
         $this->cells[] = $text;
@@ -190,7 +190,7 @@ function construct_session_full_date_time($datetime, $duration) {
 
 function construct_user_data_stat($stat, $statuses, $gradable, $grade, $maxgrade, $decimalpoints) {
     global $OUTPUT;
-    
+
     $stattable = new html_table();
     $stattable->attributes['class'] = 'attlist';
     $row = new html_table_row();

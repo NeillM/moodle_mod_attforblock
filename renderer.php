@@ -92,7 +92,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
 
         return '';
     }
-    
+
     protected function render_curdate_controls(attforblock_filter_controls $fcontrols) {
         global $CFG;
 
@@ -129,7 +129,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
                     'action'    => $fcontrols->url_path(),
                     'method'    => 'post'
             );
-            
+
             $button_form = html_writer::tag('form', $button_form, $params);
             $curdate_controls .= $button_form;
 
@@ -148,7 +148,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
         $views[ATT_VIEW_MONTHS] = get_string('months', 'attforblock');
         $views[ATT_VIEW_WEEKS] = get_string('weeks', 'attforblock');
         $views[ATT_VIEW_DAYS] = get_string('days', 'attforblock');
-        
+
         $viewcontrols = '';
         foreach ($views as $key => $sview) {
             if ($key != $fcontrols->pageparams->view) {
@@ -161,7 +161,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
 
         return html_writer::tag('nobr', $viewcontrols);
     }
-    
+
     /**
      * Renders attendance sessions managing table
      *
@@ -289,10 +289,10 @@ class mod_attforblock_renderer extends plugin_renderer_base {
                 'value' => get_string('save','attforblock'));
         $table .= html_writer::tag('center', html_writer::empty_tag('input', $params));
         $table = html_writer::tag('form', $table, array('method' => 'post', 'action' => $takedata->url_path()));
-        
+
         return $controls.$table;
     }
-    
+
     protected function render_attforblock_take_controls(attforblock_take_data $takedata) {
         $table = new html_table();
         $table->attributes['class'] = ' ';
@@ -360,7 +360,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
             $select->class = 'singleselect inline';
             $controls .= $this->output->render($select);
         }
-        
+
         return $controls;
     }
 
@@ -455,7 +455,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
             }
         }
         if ($i % $takedata->pageparams->gridcols > 0) $table->data[] = $row;
-        
+
         return html_writer::table($table);
     }
 
@@ -512,7 +512,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
 
                 if ($takedata->pageparams->viewmode == att_take_page_params::SORTED_GRID)
                     $input = html_writer::tag('nobr', $input . $st->acronym);
-                
+
                 $celldata['text'][] = $input;
             }
             $params = array(
@@ -651,13 +651,13 @@ class mod_attforblock_renderer extends plugin_renderer_base {
 
     protected function render_attforblock_report_data(attforblock_report_data $reportdata) {
         global $PAGE;
-        
+
         // Initilise Javascript used to (un)check all checkboxes.
         $this->page->requires->js_init_call('M.mod_attforblock.init_manage');
-        
+
         // Check if the user should be able to bulk send messages to other users on the course.
         $bulkmessagecapability = has_capability('moodle/course:bulkmessaging', $PAGE->context);
-        
+
         $table = new html_table();
 
         $table->attributes['class'] = 'generaltable attwidth';
@@ -684,7 +684,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
             $table->align[] = 'center';
             $table->size[] = '1px';
         }
-        
+
         foreach ($reportdata->statuses as $status) {
             $table->head[] = $status->acronym;
             $table->align[] = 'center';
@@ -696,7 +696,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
             $table->align[] = 'center';
             $table->size[] = '1px';
         }
-        
+
         if ($bulkmessagecapability) { // Display the table header for bulk messaging.
             // The checkbox must have an id of cb_selector so that the JavaScript will pick it up.
             $table->head[] = html_writer::checkbox('cb_selector', 0, false, '', array('id' => 'cb_selector'));
@@ -784,7 +784,7 @@ class mod_attforblock_renderer extends plugin_renderer_base {
         $o .= $this->construct_preferences_button(get_string('update', 'attforblock'), att_preferences_page_params::ACTION_SAVE);
         $o = html_writer::tag('form', $o, array('id' => 'preferencesform', 'method' => 'post', 'action' => $prefdata->url(array(), false)->out_omit_querystring()));
         $o = $this->output->container($o, 'generalbox attwidth');
-        
+
         return $o;
     }
 

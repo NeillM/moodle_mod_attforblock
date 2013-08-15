@@ -29,7 +29,7 @@ class mod_attforblock_export_form extends moodleform {
 
 
         $mform->addElement('header', 'general', get_string('export','quiz'));
-		
+
 		$groupmode=groups_get_activity_groupmode($cm);
         $groups = groups_get_activity_allowed_groups($cm, $USER->id);
 		if ($groupmode == VISIBLEGROUPS or has_capability('moodle/site:accessallgroups', $modcontext)) {
@@ -41,13 +41,13 @@ class mod_attforblock_export_form extends moodleform {
             }
         }
         $mform->addElement('select', 'group', get_string('group'), $grouplist);
-        
+
         $ident = array();
         $ident[] =& MoodleQuickForm::createElement('checkbox', 'id', '', get_string('studentid', 'attforblock'));
         $ident[] =& MoodleQuickForm::createElement('checkbox', 'uname', '', get_string('username'));
         $mform->addGroup($ident, 'ident', get_string('identifyby','attforblock'), array('<br />'), true);
         $mform->setDefaults(array('ident[id]' => true, 'ident[uname]' => true));
-        
+
         $mform->addElement('checkbox', 'includeallsessions', get_string('includeall','attforblock'), get_string('yes'));
         $mform->setDefault('includeallsessions', true);
         $mform->addElement('checkbox', 'includenottaken', get_string('includenottaken','attforblock'), get_string('yes'));
@@ -56,13 +56,13 @@ class mod_attforblock_export_form extends moodleform {
         $mform->disabledIf('sessionstartdate', 'includeallsessions', 'checked');
         $mform->addElement('date_selector', 'sessionenddate', get_string('endofperiod','attforblock'));
         $mform->disabledIf('sessionenddate', 'includeallsessions', 'checked');
-        
-        $mform->addElement('select', 'format', get_string('format'), 
+
+        $mform->addElement('select', 'format', get_string('format'),
         					array('excel' => get_string('downloadexcel','attforblock'),
         						  'ooo' => get_string('downloadooo','attforblock'),
         						  'text' => get_string('downloadtext','attforblock')
         					));
-        					
+
         // buttons
         $submit_string = get_string('ok');
         $this->add_action_buttons(false, $submit_string);

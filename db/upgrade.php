@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// This file keeps track of upgrades to
+// This file keeps track of upgrades to 
 // the attforblock module
 //
 // Sometimes, changes between versions involve
@@ -39,8 +39,8 @@ function xmldb_attforblock_upgrade($oldversion=0) {
 
     $result = true;
 
-/// And upgrade begins here. For each one, you'll need one
-/// block of code similar to the next one. Please, delete
+/// And upgrade begins here. For each one, you'll need one 
+/// block of code similar to the next one. Please, delete 
 /// this comment lines once this file start handling proper
 /// upgrade code.
 
@@ -60,32 +60,32 @@ function xmldb_attforblock_upgrade($oldversion=0) {
 	}
 
     if ($oldversion < 2008102401) {
-
+    	
         $table = new xmldb_table('attforblock');
-
+        
         $field = new xmldb_field('grade');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '100', 'name');
         $dbman->add_field($table, $field);
-
-
+    	
+        
         $table = new xmldb_table('attendance_sessions');
-
+        
         $field = new xmldb_field('courseid');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
         $dbman->change_field_unsigned($table, $field);
-
+    	
 //        $field = new xmldb_field('creator');
 //        $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0', 'courseid');
 //        change_field_unsigned($table, $field);
-
+    	
         $field = new xmldb_field('sessdate');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'creator');
         $dbman->change_field_unsigned($table, $field);
-
+    	
         $field = new xmldb_field('duration');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'sessdate');
         $dbman->add_field($table, $field);
-
+        
         $field = new xmldb_field('timetaken');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'takenby');
         $dbman->change_field_unsigned($table, $field);
@@ -95,86 +95,86 @@ function xmldb_attforblock_upgrade($oldversion=0) {
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'lasttaken');
         $dbman->change_field_unsigned($table, $field);
         $dbman->rename_field($table, $field, 'lasttakenby');
-
+    	
         $field = new xmldb_field('timemodified');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, null, 'lasttaken');
         $dbman->change_field_unsigned($table, $field);
-
-
+    	
+        
     	$table = new xmldb_table('attendance_log');
-
+        
         $field = new xmldb_field('attsid');
 		$field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
     	$dbman->change_field_unsigned($table, $field);
-
+    	
         $field = new xmldb_field('studentid');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'attsid');
     	$dbman->change_field_unsigned($table, $field);
-
+    	
     	$field = new xmldb_field('statusid');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'status');
     	$dbman->add_field($table, $field);
-
+    	
         $field = new xmldb_field('statusset');
         $field->set_attributes(XMLDB_TYPE_CHAR, '100', null, null, null, null, 'statusid');
         $dbman->add_field($table, $field);
-
+    	
         $field = new xmldb_field('timetaken');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'statusid');
     	$dbman->add_field($table, $field);
-
+    	
         $field = new xmldb_field('takenby');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'timetaken');
     	$dbman->add_field($table, $field);
-
+    	
         //Indexes
         $index = new xmldb_index('statusid');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('statusid'));
     	$dbman->add_index($table, $index);
-
+    	
         $index = new xmldb_index('attsid');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('attsid'));
         $dbman->drop_index($table, $index);
-
+    	
         $field = new xmldb_field('attsid'); //Rename field
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
         $dbman->rename_field($table, $field, 'sessionid');
-
+        
         $index = new xmldb_index('sessionid');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('sessionid'));
         $dbman->add_index($table, $index);
-
-
+        
+    	
     	$table = new xmldb_table('attendance_settings');
-
+        
         $field = new xmldb_field('courseid');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
         $dbman->change_field_unsigned($table, $field);
-
+    	
         $field = new xmldb_field('visible');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '1', 'grade');
         $dbman->add_field($table, $field);
-
+        
         $field = new xmldb_field('deleted');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'visible');
         $dbman->add_field($table, $field);
-
+        
         //Indexes
         $index = new xmldb_index('visible');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('visible'));
         $dbman->add_index($table, $index);
-
+        
         $index = new xmldb_index('deleted');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('deleted'));
         $dbman->add_index($table, $index);
-
+        
     	$dbman->rename_table($table, 'attendance_statuses');
 
         upgrade_mod_savepoint(true, 2008102401, 'attforblock');
     }
-
+    
     if ($oldversion < 2008102406) {
-
+    	
 	    if ($courses = $DB->get_records_sql("SELECT courseid FROM {attendance_sessions} GROUP BY courseid")) {
 	    		foreach ($courses as $c) {
 	    			//Adding own status for course (now it must have own)
@@ -198,44 +198,44 @@ function xmldb_attforblock_upgrade($oldversion=0) {
 	    			$sessions = $DB->get_records_list('attendance_sessions',  array('id'=> $sesslist));
 					foreach($sessions as $sess) {
 						execute("UPDATE {attendance_log}
-										SET timetaken = {$sess->lasttaken},
+										SET timetaken = {$sess->lasttaken}, 
 											takenby = {$sess->lasttakenby}
 									  WHERE sessionid = {$sess->id}");
 					}
-
+	    			
 	    		}
 	    	}
                 upgrade_mod_savepoint(true, 2008102406, 'attforblock');
-
+    	    	
      }
-
+     
     if ($oldversion < 2008102409) {
         $table = new xmldb_table('attendance_statuses');
-
+        
         $field = new xmldb_field('status');
         $dbman->drop_field($table, $field);
-
+        
         $index = new xmldb_index('status');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('status'));
         $dbman->drop_index($table, $index);
 
-
+        
         $table = new xmldb_table('attendance_log');
-
+        
         $field = new xmldb_field('status');
         $dbman->drop_field($table, $field);
-
+        
         $index = new xmldb_index('status');
         $index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('status'));
         $dbman->drop_index($table, $index);
-
+        
         $table = new xmldb_table('attendance_sessions');
 
         $field = new xmldb_field('creator');
         $dbman->drop_field($table, $field);
         upgrade_mod_savepoint(true, 2008102409, 'attforblock');
-
-    }
+        
+    } 
 
     if ($oldversion < 2010070900) {
         $table = new xmldb_table('attendance_sessions');
@@ -251,7 +251,7 @@ function xmldb_attforblock_upgrade($oldversion=0) {
         if (!$dbman->index_exists($table, $index)) {
             $dbman->add_index($table, $index);
         }
-
+        
         upgrade_mod_savepoint(true, 2010070900, 'attforblock');
     }
 
@@ -340,18 +340,18 @@ function xmldb_attforblock_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2011061800, 'attforblock');
     }
-
+    
     if ($oldversion < 2013050700) {
         $table = new xmldb_table('attendance_sessions');
-
+        
         $field = new xmldb_field('studentscanmark');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'descriptionformat');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
+        
         upgrade_mod_savepoint(true, 2013050700, 'attforblock');
     }
-
+    
     return $result;
 }

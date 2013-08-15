@@ -8,7 +8,7 @@ M.mod_attforblock.init_manage = function(Y) {
         else
             checknone();
     }, '#cb_selector' );
-    
+
 };
 
 M.mod_attforblock.set_preferences_action = function(action) {

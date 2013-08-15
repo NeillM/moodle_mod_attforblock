@@ -69,7 +69,7 @@ if ($mform->is_cancelled()) {
     }
 
     // The form did not validate correctly so we will set it to display the data they submitted.
-    $mform->setdata($fromform);
+    $mform->set_data($fromform);
 }
 
 $PAGE->set_url($att->url_sessions());

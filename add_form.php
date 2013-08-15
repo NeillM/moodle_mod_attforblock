@@ -76,14 +76,14 @@ class mod_attforblock_add_form extends moodleform {
                     return;
             }
         }
-        
+
         $mform->addElement('checkbox', 'addmultiply', '', get_string('createmultiplesessions','attforblock'));
         $mform->addHelpButton('addmultiply', 'createmultiplesessions', 'attforblock');
-        
+
         // Studetns can mark own attendance.
         $mform->addElement('checkbox', 'studentscanmark', '', get_string('studentscanmark','attforblock'));
         $mform->addHelpButton('studentscanmark', 'studentscanmark', 'attforblock');
-		
+
 //        $mform->addElement('date_selector', 'sessiondate', get_string('sessiondate','attforblock'));
         $mform->addElement('date_time_selector', 'sessiondate', get_string('sessiondate','attforblock'));
 
@@ -97,10 +97,10 @@ class mod_attforblock_add_form extends moodleform {
         $durtime[] =& MoodleQuickForm::createElement('select', 'hours', get_string('hour', 'form'), $hours, false, true);
 		$durtime[] =& MoodleQuickForm::createElement('select', 'minutes', get_string('minute', 'form'), $minutes, false, true);
         $mform->addGroup($durtime, 'durtime', get_string('duration','attforblock'), array(' '), true);
-        
+
         $mform->addElement('date_selector', 'sessionenddate', get_string('sessionenddate','attforblock'));
 		$mform->disabledIf('sessionenddate', 'addmultiply', 'notchecked');
-        
+
         $sdays = array();
 		if ($CFG->calendar_startwday === '0') { //week start from sunday
         	$sdays[] =& MoodleQuickForm::createElement('checkbox', 'Sun', '', get_string('sunday','calendar'));
@@ -116,17 +116,17 @@ class mod_attforblock_add_form extends moodleform {
 		}
         $mform->addGroup($sdays, 'sdays', get_string('sessiondays','attforblock'), array(' '), true);
 		$mform->disabledIf('sdays', 'addmultiply', 'notchecked');
-        
+
         $period = array(1=>1,2,3,4,5,6,7,8);
         $periodgroup = array();
         $periodgroup[] =& MoodleQuickForm::createElement('select', 'period', '', $period, false, true);
         $periodgroup[] =& MoodleQuickForm::createElement('static', 'perioddesc', '', get_string('week','attforblock'));
         $mform->addGroup($periodgroup, 'periodgroup', get_string('period','attforblock'), array(' '), false);
 		$mform->disabledIf('periodgroup', 'addmultiply', 'notchecked');
-        
+
         $mform->addElement('editor', 'sdescription', get_string('description', 'attforblock'), null, array('maxfiles'=>EDITOR_UNLIMITED_FILES, 'noclean'=>true, 'context'=>$modcontext));
         $mform->setType('sdescription', PARAM_RAW);
-		
+
 //-------------------------------------------------------------------------------
         // buttons
         $submit_string = get_string('addsession', 'attforblock');

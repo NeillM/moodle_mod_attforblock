@@ -54,13 +54,13 @@ function att_add_default_statuses($attid) {
 }
 
 function attforblock_add_instance($attforblock) {
-/// Given an object containing all the necessary data, 
-/// (defined by the form in mod.html) this function 
-/// will create a new instance and return the id number 
+/// Given an object containing all the necessary data,
+/// (defined by the form in mod.html) this function
+/// will create a new instance and return the id number
 /// of the new instance.
 
     global $DB;
-    
+
     $attforblock->timemodified = time();
 
     $attforblock->id = $DB->insert_record('attforblock', $attforblock);
@@ -99,7 +99,7 @@ function attforblock_delete_instance($id) {
     if (! $attforblock = $DB->get_record('attforblock', array('id'=> $id))) {
         return false;
     }
-    
+
 	if ($sessids = array_keys($DB->get_records('attendance_sessions', array('attendanceid'=> $id), '', 'id'))) {
         $DB->delete_records_list('attendance_log', 'sessionid', $sessids);
         $DB->delete_records('attendance_sessions', array('attendanceid'=> $id));
@@ -125,7 +125,7 @@ function attforblock_delete_course($course, $feedback=true){
         $DB->delete_records_list('attendance_sessions', 'attendanceid', $attids);
     }
 	$DB->delete_records('attforblock', array('course'=> $course->id));
-	
+
     return true;
 }
 
@@ -137,7 +137,7 @@ function attforblock_reset_course_form_definition(&$mform) {
     $mform->addElement('header', 'attendanceheader', get_string('modulename', 'attforblock'));
 
 	$mform->addElement('static', 'description', get_string('description', 'attforblock'),
-								get_string('resetdescription', 'attforblock'));    
+								get_string('resetdescription', 'attforblock'));
     $mform->addElement('checkbox', 'reset_attendance_log', get_string('deletelogs','attforblock'));
 
     $mform->addElement('checkbox', 'reset_attendance_sessions', get_string('deletesessions','attforblock'));
@@ -205,13 +205,13 @@ function attforblock_reset_userdata($data) {
 }
 
 function attforblock_user_outline($course, $user, $mod, $attforblock) {
-/// Return a small object with summary information about what a 
+/// Return a small object with summary information about what a
 /// user has done with a given particular instance of this module
 /// Used for user activity reports.
 /// $return->time = the time they did it
 /// $return->info = a short text description
     global $CFG;
-	
+
     require_once(dirname(__FILE__).'/locallib.php');
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -231,18 +231,18 @@ function attforblock_user_outline($course, $user, $mod, $attforblock) {
 
         $result->info = $grade.' / '.$maxgrade;
   	}
-  	
+
 	return $result;
 }
 
 function attforblock_user_complete($course, $user, $mod, $attforblock) {
-/// Print a detailed representation of what a  user has done with 
+/// Print a detailed representation of what a  user has done with
 /// a given particular instance of this module, for user activity reports.
     global $CFG;
 
     require_once(dirname(__FILE__).'/renderhelpers.php');
     require_once($CFG->libdir.'/gradelib.php');
-	
+
   	if (has_capability('mod/attforblock:canbelisted', $mod->context, $user->id)) {
         echo construct_full_user_stat_html_table($attforblock, $course, $user);
 	}
@@ -251,17 +251,17 @@ function attforblock_user_complete($course, $user, $mod, $attforblock) {
 }
 
 function attforblock_print_recent_activity($course, $isteacher, $timestart) {
-/// Given a course and a time, this module should find recent activity 
-/// that has occurred in attforblock activities and print it out. 
+/// Given a course and a time, this module should find recent activity
+/// that has occurred in attforblock activities and print it out.
 /// Return true if there was output, or false is there was none.
 
-    return false;  //  True if anything was printed, otherwise false 
+    return false;  //  True if anything was printed, otherwise false
 }
 
 function attforblock_cron () {
 /// Function to be run periodically according to the moodle cron
-/// This function searches for things that need to be done, such 
-/// as sending out mail, toggling flags etc ... 
+/// This function searches for things that need to be done, such
+/// as sending out mail, toggling flags etc ...
 
     return true;
 }
@@ -275,9 +275,9 @@ function attforblock_cron () {
  */
 /*function attforblock_get_user_grades($attforblock, $userid=0) {
     global $CFG, $DB;
-    
+
 	require_once('_locallib.php');
-	
+
     if (! $course = $DB->get_record('course', array('id'=> $attforblock->course))) {
         error("Course is misconfigured");
     }
@@ -350,9 +350,9 @@ function attforblock_cron () {
  */
 function attforblock_grade_item_update($attforblock, $grades=NULL) {
     global $CFG, $DB;
-    
+
 	require_once('locallib.php');
-	
+
     if (!function_exists('grade_update')) { //workaround for buggy PHP versions
         require_once($CFG->libdir.'/gradelib.php');
     }
@@ -372,12 +372,12 @@ function attforblock_grade_item_update($attforblock, $grades=NULL) {
         $cm = get_coursemodule_from_instance('attforblock', $attforblock->id);
         $params = array('itemname'=>$attforblock->name/*, 'idnumber'=>$attforblock->id*/);
     }
-    
+
     if ($attforblock->grade > 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
         $params['grademax']  = $attforblock->grade;
         $params['grademin']  = 0;
-    } 
+    }
     else if ($attforblock->grade < 0) {
         $params['gradetype'] = GRADE_TYPE_SCALE;
         $params['scaleid']   = -$attforblock->grade;
@@ -425,7 +425,7 @@ function attforblock_scale_used ($attforblockid, $scaleid) {
 //it it has support for grading and scales. Commented code should be
 //modified if necessary. See forum, glossary or journal modules
 //as reference.
-   
+
     $return = false;
 }
 
@@ -474,5 +474,5 @@ function attforblock_pluginfile($course, $cm, $context, $filearea, $args, $force
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-/// Any other attforblock functions go here.  Each of them must have a name that 
+/// Any other attforblock functions go here.  Each of them must have a name that
 /// starts with attforblock_

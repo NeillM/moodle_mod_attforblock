@@ -40,7 +40,7 @@ class mod_attforblock_update_form extends moodleform {
                 'sdescription' => $sess->description_editor);
 
         $mform->addElement('header', 'general', get_string('changesession','attforblock'));
-        
+
 		$mform->addElement('static', 'olddate', get_string('olddate','attforblock'), userdate($sess->sessdate, get_string('strftimedmyhm', 'attforblock')));
         $mform->addElement('date_time_selector', 'sessiondate', get_string('newdate','attforblock'));
 
@@ -53,12 +53,12 @@ class mod_attforblock_update_form extends moodleform {
         $durselect[] =& MoodleQuickForm::createElement('select', 'hours', '', $hours);
 		$durselect[] =& MoodleQuickForm::createElement('select', 'minutes', '', $minutes, false, true);
 		$mform->addGroup($durselect, 'durtime', get_string('duration','attforblock'), array(' '), true);
-		
+
         $mform->addElement('editor', 'sdescription', get_string('description', 'attforblock'), null, $defopts);
         $mform->setType('sdescription', PARAM_RAW);
-        
+
         $mform->setDefaults($data);
-		
+
 //-------------------------------------------------------------------------------
         // buttons
         $submit_string = get_string('update', 'attforblock');

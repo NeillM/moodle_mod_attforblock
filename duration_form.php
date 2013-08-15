@@ -30,7 +30,7 @@ class mod_attforblock_duration_form extends moodleform {
 
         $mform->addElement('header', 'general', get_string('changeduration','attforblock'));
 		$mform->addElement('static', 'count', get_string('countofselected','attforblock'), count(explode('_', $ids)));
-        
+
         for ($i=0; $i<=23; $i++) {
             $hours[$i] = sprintf("%02d",$i);
         }
@@ -40,13 +40,13 @@ class mod_attforblock_duration_form extends moodleform {
         $durselect[] =& MoodleQuickForm::createElement('select', 'hours', '', $hours);
 		$durselect[] =& MoodleQuickForm::createElement('select', 'minutes', '', $minutes, false, true);
 		$mform->addGroup($durselect, 'durtime', get_string('newduration','attforblock'), array(' '), true);
-		
+
         $mform->addElement('hidden', 'ids', $ids);
        	$mform->addElement('hidden', 'id', $cm->id);
         $mform->addElement('hidden', 'action', att_sessions_page_params::ACTION_CHANGE_DURATION);
-        
+
         $mform->setDefaults(array('durtime' => array('hours'=>0, 'minutes'=>0)));
-		
+
 //-------------------------------------------------------------------------------
         // buttons
         $submit_string = get_string('update', 'attforblock');

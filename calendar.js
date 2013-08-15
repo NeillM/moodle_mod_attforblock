@@ -26,7 +26,7 @@ YAHOO.util.Event.onDOMReady(function(){
                 calendar.cfg.setProperty("pagedate", calendar.today);
                 calendar.render();
             }
-            
+
             function closeHandler() {
                 dialog.hide();
             }
